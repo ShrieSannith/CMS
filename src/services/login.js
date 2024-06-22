@@ -40,20 +40,6 @@ async function refreshToken(Oldtoken) {
   }
 }
 
-// async function logout(userId) {
-//   try {
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       throw new Error('Could not find any user');
-//     }
-//     user.active = false;
-//     await user.save();
-//     return { message: 'Logged out successfully' };
-//   } catch (error) {
-//     throw new Error(error); // Propagate the error message
-//   }
-// }
-
 module.exports = {
   login, refreshToken
 }

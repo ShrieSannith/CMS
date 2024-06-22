@@ -10,6 +10,5 @@ router.use(cors());
 // Handle POST requests to /login
 router.post("/login", login);
 router.post("/refresh-token", refreshToken);
-// router.post("/logout", logout);
 
 module.exports = router;

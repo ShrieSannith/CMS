@@ -3,6 +3,7 @@ const signuproute = require('./routes/signup');
 const loginroute = require('./routes/login');
 const userroute = require('./routes/user');
 const formsroute = require('./routes/forms');
+const logoutroute = require('./services/logout');
 
 
 const bodyParser = require('body-parser');
@@ -23,6 +24,7 @@ createAdminAccount();
 app.use("/user", signuproute);
 app.use("/auth", loginroute);
 app.use("/api", userroute);
+app.use("/api", logoutroute);
 app.use("/issue", formsroute);
 app.use("/twilio", redirectCalls);
 

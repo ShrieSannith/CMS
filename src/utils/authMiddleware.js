@@ -24,11 +24,10 @@ function verifyToken(token) {
     return new Promise((resolve, reject) => {
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) {
-                reject(err); // Reject if there's an error (e.g., invalid or expired token)
+                reject(err); 
                 
             } else {
-                resolve(decoded); // Resolve with the decoded token
-                // console.log("verified");
+                resolve(decoded);
             }
         });
     });

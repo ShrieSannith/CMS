@@ -1,9 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import logo from '../images/logo.png'
-import profile from '../assets/profile2.webp'
-// const { User } = require('../../../src/models/userDetails');
-
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,19 +12,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import Avatar from '@mui/material/Avatar';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
-import axios from 'axios';
-
-// const updateUserStatus = async (userId, status) => {
-//   try {
-//     await axios.patch(`/api/users/${userId}`, { active: status });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 
 const logoStyle = {
   width: '30px',
@@ -52,26 +38,51 @@ function AppAppBar({ mode, toggleColorMode }) {
     setOpen(newOpen);
   };
 
-  const handleLogout = async () => {
-    try {
-      const userId = localStorage.getItem("userId");
-      await updateUserStatus(userId, false);+66
+const handleLogout = async () => {
+  const token = localStorage.getItem('token');
 
-      // Clear local storage
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
+  if (!token) {
+    console.error('No token found');
+    setSnackbar({
+      open: true,
+      message: 'No token found. You are already logged out.',
+      severity: 'error',
+    });
+    return;
+  }
 
-      // Navigate to home or login page
-      navigate('/'); // Replace with the appropriate path after logout
-    } catch (error) {
-      console.error('Logout failed:', error.message);
-      setSnackbar({
-        open: true,
-        message: 'Logout failed. Please try again.',
-        severity: 'error',
-      });
+  try {
+    const response = await fetch('http://localhost:5000/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Logout failed');
     }
-  };
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    navigate('/');
+
+    setSnackbar({
+      open: true,
+      message: 'Logout successful',
+      severity: 'success',
+    });
+  } catch (error) {
+    console.error('Logout failed:', error.message);
+    setSnackbar({
+      open: true,
+      message: 'Logout failed. Please try again.',
+      severity: 'error',
+    });
+  }
+};
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });

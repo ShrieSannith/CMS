@@ -30,19 +30,8 @@ async function refreshToken(req, res) {
   }
 }
 
-// async function logout(req, res) {
-//   try {
-//     const user = await User.findById(req.user._id);
-//     user.active = false;
-//     await user.save();
-//     res.json({ message: 'Logged out successfully' });
-//   } catch (err) {
-//     res.status(401).json({ error: err.message });
-//   }
-// }
 
 module.exports = {
   login,
   refreshToken,
-  // logout,
 };
