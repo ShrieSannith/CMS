@@ -1,0 +1,105 @@
+.issue-form {
+    width: 100%;
+    max-width: 800px;
+    /* Increase max-width to allow more space for the sliders */
+    margin: 0 auto;
+    padding: 20px;
+    
+    border-radius: 8px;
+    background-color: white;
+}
+
+.issue-form .slider-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    /* Increased margin bottom */
+    margin-top: 7px;
+}
+
+.issue-form .slider-item {
+    flex: 1;
+    margin: 0 30px;
+    /* Increase the gap between the sliders */
+    text-align: center;
+}
+
+.issue-form .upload-button {
+    margin: 15px 0;
+}
+
+.issue-form .MuiSlider-root {
+    margin: 0;
+    /* Remove all margins for sliders */
+}
+
+.issue-form .MuiFormControlLabel-root {
+    margin: 20px 0;
+}
+
+.issue-form .level-upload-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    /* Add margin to the left */
+    margin-right: 20px;
+    /* Add margin to the right */
+    margin-top: 7px;
+}
+
+.issue-form .level-upload-item {
+    flex: 2;
+    text-align: center;
+}
+
+.issue-form .level-upload-item:last-child {
+    margin-right: 0;
+    /* Remove margin for the last item */
+}
+
+.upload-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* Align items vertically */
+    align-items: center;
+    /* Center items horizontally */
+    margin-top: 10px;
+    /* Adjust as needed */
+}
+
+.upload-note {
+    font-size: 12px;
+    /* Adjust font size as needed */
+    color: #666;
+    /* Adjust text color */
+    margin-top: 0;
+    /* Remove margin top */
+}
+
+.upload-button {
+    margin-bottom: 0;
+    /* Remove bottom margin from the button */
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+
+    .issue-form .slider-container,
+    .issue-form .level-upload-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .issue-form .slider-item,
+    .issue-form .level-upload-item {
+        margin: 10px 0;
+    }
+
+    .issue-form .level-upload-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
