@@ -3,8 +3,6 @@ import { Button, Slider, TextField, Checkbox, FormControlLabel, Typography } fro
 import axios from 'axios';
 import '../css/issueForm.css';
 
-
-
 const IssueForm = () => {
   const [urgency, setUrgency] = useState(2);
   const [impact, setImpact] = useState(2);
@@ -82,7 +80,6 @@ const IssueForm = () => {
   ];
 
   return (
-    
     <div>
       <br/><br/><br/><br/><br/>
       <form onSubmit={handleSubmit} className="issue-form">
@@ -93,7 +90,7 @@ const IssueForm = () => {
         <TextField
           label="Client Name"
           variant="outlined"
-          style = {{borderRadius:"50px"}}
+          style={{ borderRadius: "50px" }}
           margin="normal"
           value={clientName}
           onChange={(e) => setClientName(e.target.value)}
