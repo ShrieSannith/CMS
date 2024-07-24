@@ -1,7 +1,49 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Button, Slider, TextField, Checkbox, FormControlLabel, Typography } from '@mui/material';
-import axios from 'axios';
 import '../css/issueForm.css';
+import axios from 'axios';
+
+// Custom styled Slider with gradient and rounded thumb
+const PrettoSlider = styled(Slider)({
+  height: 20,
+  '& .MuiSlider-track': {
+    border: 'none',
+    height: '20px',
+    background: 'linear-gradient(90deg, #58C5F4 0%, #297CC9 100%)',
+  },
+  '& .MuiSlider-thumb': {
+    height: 25,
+    width: 25,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: '#297CC9',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&::before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+    },
+    '& > *': {
+      transform: 'rotate(45deg)',
+    },
+  },
+});
 
 const IssueForm = () => {
   const [urgency, setUrgency] = useState(2);
@@ -46,10 +88,11 @@ const IssueForm = () => {
     };
 
     try {
-      const token = localStorage.getItem('token'); // Retrieve token from local storage
+      const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:5000/issue/forms', formData, {
         headers: {
-          Authorization: `Bearer ${token}` // Include token in the headers
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json' // Ensure the content type is set to JSON
         }
       });
       console.log(response.data);
@@ -61,98 +104,234 @@ const IssueForm = () => {
   };
 
   const urgencyMarks = [
-    { value: 1, label: 'Low' },
-    { value: 2, label: 'Medium' },
-    { value: 3, label: 'High' },
+    { value: 1, label: '' },
+    { value: 2, label: '' },
+    { value: 3, label: '' },
   ];
 
   const impactMarks = [
-    { value: 1, label: 'Low-Single' },
-    { value: 2, label: 'Medium-Multiple' },
-    { value: 3, label: 'High-System Wide' },
+    { value: 1, label: '' },
+    { value: 2, label: '' },
+    { value: 3, label: '' },
   ];
 
   const levelOfIssueMarks = [
-    { value: 1, label: 'Basic' },
-    { value: 2, label: 'Advanced' },
-    { value: 3, label: 'Technical' },
-    { value: 4, label: 'On-Site' },
+    { value: 1, label: '' },
+    { value: 2, label: '' },
+    { value: 3, label: '' },
+    { value: 4, label: '' },
   ];
 
   return (
     <div>
-      <br/><br/><br/><br/><br/>
+      <br/><br/><br/><br/>
+      <div className="issue-form-container" style={{ display:"flex", width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
       <form onSubmit={handleSubmit} className="issue-form">
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          ISSUE FORM
+        <Typography
+          variant="h5"
+          component="h2"
+          gutterBottom
+          align="left"
+          style={{ fontWeight: 'bold' }}
+        >
+          Call Details
         </Typography>
-
+        <div className="call-details">
+          <div className="call-item">
+            <Typography>Incoming Phone No</Typography>
+            <TextField
+              name="phoneNo"
+              style={{ backgroundColor: '#c0c0c0' }}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div>
+          <div className="call-item">
+            <Typography>Agent ID</Typography>
+            <TextField
+              name="agentId"
+              style={{ backgroundColor: '#c0c0c0' }}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div>
+          <div className="call-item">
+            <Typography>Date</Typography>
+            <TextField
+              name="date"
+              style={{ backgroundColor: '#c0c0c0' }}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div>
+          <div className="call-item">
+            <Typography>Time</Typography>
+            <TextField
+              name="time"
+              style={{ backgroundColor: '#c0c0c0' }}
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div>
+        </div>
+        <hr />
+        <br />
+        <Typography variant="h5" component="h2" gutterBottom align="left" style={{ fontWeight: 'bold' }}>
+          Issue Form
+          </Typography>
+          <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+               <div style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "16px",
+          }}>
+            <Typography variant="h6" style={{ marginRight: "16px" }}>Client Name</Typography>
         <TextField
           label="Client Name"
           variant="outlined"
-          style={{ borderRadius: "50px" }}
           margin="normal"
           value={clientName}
           onChange={(e) => setClientName(e.target.value)}
+          InputProps={{
+            style: {
+              borderRadius: "30px",
+              boxShadow: "inset 0px -2px 5px rgba(0, 0, 0, 0.2)",
+              minWidth: "300px",
+            },
+          }}
+          style={{
+            borderRadius: "30px",
+            minWidth: "300px",
+          }}
         />
-
+        </div></div>
         <div className="slider-container">
           <div className="slider-item">
-            <Typography gutterBottom>Urgency</Typography>
-            <Slider
-              aria-label="Urgency"
-              value={urgency}
-              onChange={(e, newValue) => setUrgency(newValue)}
-              step={1}
-              marks={urgencyMarks}
-              min={1}
-              max={3}
-              valueLabelDisplay="auto"
-              sx={{ width: '90%' }} // Ensure the slider takes full width of its container
-            />
+            <Typography variant="h6" gutterBottom>Urgency</Typography>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginBottom: '10px',
+            }}>
+              <PrettoSlider
+                step={1}
+                min={1}
+                max={3}
+                value={urgency}
+                onChange={(e, newValue) => setUrgency(newValue)}
+                valueLabelDisplay="auto"
+                marks={urgencyMarks}
+              />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                marginTop: '2px', // Space between the slider and the marks
+              }}>
+                <Typography variant="h8">Low</Typography>
+                <Typography variant="h8">Medium</Typography>
+                <Typography variant="h8">High</Typography>
+              </div>
+              
+            </div>
           </div>
           <div className="slider-item">
-            <Typography gutterBottom>Impact</Typography>
-            <Slider
-              aria-label="Impact"
-              value={impact}
-              onChange={(e, newValue) => setImpact(newValue)}
-              step={1}
-              marks={impactMarks}
-              min={1}
-              max={3}
-              valueLabelDisplay="auto"
-              sx={{ width: '90%' }} // Ensure the slider takes full width of its container
-            />
+            <Typography variant="h6" gutterBottom>Impact</Typography>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginBottom: '10px',
+            }}>
+              <PrettoSlider
+                step={1}
+                min={1}
+                max={3}
+                value={impact}
+                onChange={(e, newValue) => setImpact(newValue)}
+                valueLabelDisplay="auto"
+                marks={impactMarks}
+              />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                marginTop: '2px', // Space between the slider and the marks
+              }}>
+                <Typography variant="h8">Low</Typography>
+                <Typography variant="h8">Medium</Typography>
+                <Typography variant="h8">High</Typography>
+              </div>
+            </div>
           </div>
         </div>
 
         <TextField
           label="Issue Description"
-          variant="outlined"
           fullWidth
           margin="normal"
           multiline
           rows={4}
           value={issueDescription}
           onChange={(e) => setIssueDescription(e.target.value)}
+          InputProps={{
+            style: {
+              borderRadius: '30px',
+              boxShadow: 'inset 0px -2px 5px rgba(0, 0, 0, 0.2)',
+              minWidth: '300px',
+            },
+          }}
+          variant="outlined"
+          style={{
+            borderRadius: '30px',
+            minWidth: '300px',
+          }}
         />
 
         <div className="level-upload-container">
-          <div className="level-upload-item" style={{ flex: '2' }}>
-            <Typography gutterBottom>Level Of Issue</Typography>
-            <Slider
-              aria-label="Level Of Issue"
-              value={levelOfIssue}
+          <div className="level-upload-item">
+              <Typography variant="h5" gutterBottom>Level Of Issue</Typography>
+              <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginBottom: '10px', // Margin below the slider
+            }}>
+            <PrettoSlider
+                value={levelOfIssue}
               onChange={(e, newValue) => setLevelOfIssue(newValue)}
               step={1}
-              marks={levelOfIssueMarks}
               min={1}
               max={4}
               valueLabelDisplay="auto"
-              sx={{ width: '80%' }} // Ensure the slider takes full width of its container
-            />
-          </div>
+              />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                marginTop: '2px', // Space between the slider and the marks
+              }}>
+                <Typography variant="h8">Basic</Typography>
+                <Typography variant="h8">Advanced</Typography>
+                <Typography variant="h8">Technical</Typography>
+                <Typography variant="h8">On-Site</Typography>
+              </div>
+              </div>
+              </div>
+            
           <div className="upload-button-wrapper">
             <Button variant="contained" color="primary" className="upload-button">
               Send Upload Link
@@ -165,15 +344,26 @@ const IssueForm = () => {
 
         <TextField
           label="Remarks"
-          variant="outlined"
           fullWidth
           margin="normal"
           multiline
           rows={4}
           value={remarks}
           onChange={(e) => setRemarks(e.target.value)}
+          InputProps={{
+            style: {
+              borderRadius: '30px',
+              boxShadow: 'inset 0px -2px 5px rgba(0, 0, 0, 0.2)',
+              minWidth: '300px',
+            },
+          }}
+          variant="outlined"
+          style={{
+            borderRadius: '30px',
+            minWidth: '300px',
+          }}
         />
-
+<div style={{ textAlign: 'left' }}>
         <FormControlLabel
           control={
             <Checkbox
@@ -183,13 +373,14 @@ const IssueForm = () => {
           }
           label="Sorted"
         />
-
+</div>
         <div style={{ textAlign: 'center' }}>
-          <Button variant="contained" type="submit" style={{ marginTop: '0px' }}>
+          <Button variant="contained" type="submit" style={{ marginTop: '16px' }}>
             Submit
           </Button>
         </div>
       </form>
+    </div>
     </div>
   );
 };

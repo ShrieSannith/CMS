@@ -8,8 +8,8 @@ function Signinpage() {
   return (
     <div className="App">
       <AppAppBar/>
-      {/* <IssueForm /> */}
-      <SampleForm />
+      <IssueForm />
+      {/* <SampleForm /> */}
     </div>
   );
 }
