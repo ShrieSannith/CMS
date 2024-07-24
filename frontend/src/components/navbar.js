@@ -14,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import {  useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+
 
 const logoStyle = {
   width: '30px',
@@ -38,53 +41,88 @@ function AppAppBar({ mode, toggleColorMode }) {
     setOpen(newOpen);
   };
 
-const handleLogout = async () => {
-  const token = localStorage.getItem('token');
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
 
-  if (!token) {
-    console.error('No token found');
-    setSnackbar({
-      open: true,
-      message: 'No token found. You are already logged out.',
-      severity: 'error',
-    });
-    return;
-  }
-
-  try {
-    const response = await fetch('http://localhost:5000/api/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.error || 'Logout failed');
+    if (!token) {
+      console.error('No token found');
+      return;
     }
 
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    navigate('/');
+    try {
+      const response = await fetch('http://localhost:5000/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-    setSnackbar({
-      open: true,
-      message: 'Logout successful',
-      severity: 'success',
-    });
-  } catch (error) {
-    console.error('Logout failed:', error.message);
-    setSnackbar({
-      open: true,
-      message: 'Logout failed. Please try again.',
-      severity: 'error',
-    });
-  }
-};
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Logout failed');
+      }
 
-  const handleCloseSnackbar = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      navigate('/');
+
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    const inactivityTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+    let inactivityTimer;
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        handleLogout();
+      }, inactivityTimeout);
+      localStorage.setItem('lastActivityTime', new Date().getTime());
+    };
+
+    const handleBeforeUnload = () => {
+      // Store the time when the tab is closed
+      localStorage.setItem('tabCloseTime', new Date().getTime());
+    };
+
+    const checkLogout = () => {
+      const lastActivityTime = localStorage.getItem('lastActivityTime');
+      const tabCloseTime = localStorage.getItem('tabCloseTime');
+      const currentTime = new Date().getTime();
+      const timeoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      // Check if 30 minutes have passed since last activity or tab closure
+      if (lastActivityTime && (currentTime - lastActivityTime) >= timeoutDuration) {
+        handleLogout();
+      } else if (tabCloseTime && (currentTime - tabCloseTime) >= timeoutDuration) {
+        handleLogout();
+      }
+    };
+
+    // Attach event listeners
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keypress', resetInactivityTimer);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Start inactivity timer
+    resetInactivityTimer();
+
+    // Check for logout on page load
+    checkLogout();
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      window.removeEventListener('mousemove', resetInactivityTimer);
+      window.removeEventListener('keypress', resetInactivityTimer);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [navigate]);
+
+    const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
