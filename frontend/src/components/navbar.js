@@ -190,6 +190,16 @@ function AppAppBar({ mode, toggleColorMode }) {
               {token ? (
                 // If token exists, render Logout button
                 <div>
+                  <a href = "/form" style={{textDecoration:"none"}}>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    size="small"
+                    
+                    sx={{ marginLeft: '10px', marginRight: '10px' }}
+                  >
+                    FORMS
+                  </Button></a>
                   <Button
                     color="primary"
                     variant="text"
