@@ -1,0 +1,111 @@
+.issue-form {
+  width: 100%;
+  max-width: 1100px !important;
+  margin: 0 auto;
+  padding: 20px;
+  /* border: 1px solid #ccc;
+    border-radius: 8px; */
+  /* background-color: white; */
+}
+
+.call-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  /* align-items: left; */
+}
+
+.call-item {
+  flex: 1;
+  min-width: 400px;
+  margin: 10px;
+  text-align: left;
+  /* Aligns the text inside .call-item to the left */
+}
+
+.slider-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 7px;
+}
+
+.slider-item {
+  flex: 1;
+  margin: 0 30px;
+  text-align: center;
+}
+
+.upload-button {
+  margin: 15px 0;
+}
+
+.MuiSlider-root {
+  margin: 0;
+}
+
+.MuiFormControlLabel-root {
+  margin: 20px 0;
+}
+
+.level-upload-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 7px;
+}
+
+.level-upload-item {
+  flex: 2;
+  text-align: center;
+}
+
+.level-upload-item:last-child {
+  margin-right: 0;
+}
+
+.upload-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.upload-note {
+  font-size: 12px;
+  color: #666;
+  margin-top: 0;
+}
+
+.upload-button {
+  margin-bottom: 0;
+}
+
+
+
+@media (max-width: 600px) {
+
+  .issue-form .slider-container,
+  .issue-form .level-upload-container,
+  .call-details {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .issue-form .slider-item,
+  .issue-form .level-upload-item,
+  .call-item {
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  .issue-form .level-upload-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
