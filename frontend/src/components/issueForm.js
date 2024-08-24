@@ -122,15 +122,15 @@ const IssueForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const urgencyLabels = ["Low", "Medium", "High"];
     const impactLabels = ["Low-Single", "Medium-Multiple", "High-System Wide"];
     const levelOfIssueLabels = ["Basic", "Advanced", "Technical", "On-Site"];
-
+  
     const priority = calculatePriority(urgency, impact);
-
+  
     const userId = localStorage.getItem("userId");
-
+  
     const formData = {
       callLogId: callDetails ? callDetails._id : '',
       formData: {
@@ -145,25 +145,28 @@ const IssueForm = () => {
         priority
       }
     };
-
+  
+    // console.log("FormData to Submit:", formData);
+  
     try {
       const response = await axios.post('http://localhost:5000/api/calls/submit', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response.data);
-
+      // console.log("Response from backend:", response.data);
+  
       setSnackbar({
         open: true,
         message: 'Form submitted successfully!',
         severity: 'success',
       });
-
+  
       // Optionally clear form data or redirect
     } catch (error) {
       console.error('Error submitting form data:', error);
-
+      alert(`Error: ${error.message}`);
+  
       setSnackbar({
         open: true,
         message: 'Error submitting form data!',
@@ -171,7 +174,7 @@ const IssueForm = () => {
       });
     }
   };
-
+  
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };

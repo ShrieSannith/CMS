@@ -42,87 +42,38 @@ function AppAppBar({ mode, toggleColorMode }) {
   };
 
   const handleLogout = async () => {
-    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId'); // Get userId from local storage
 
-    if (!token) {
-      console.error('No token found');
-      return;
+    if (!userId) {
+        console.error('No userId found');
+        return;
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+        const response = await fetch('http://localhost:5000/api/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }), // Send userId in the request body
+        });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Logout failed');
-      }
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Logout failed');
+        }
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
-      navigate('/');
+        // Clear local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/');
 
     } catch (error) {
-      console.error('Logout failed:', error.message);
+        console.error('Logout failed:', error.message);
     }
-  };
+};
 
-  useEffect(() => {
-    const inactivityTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
-    let inactivityTimer;
-
-    const resetInactivityTimer = () => {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        handleLogout();
-      }, inactivityTimeout);
-      localStorage.setItem('lastActivityTime', new Date().getTime());
-    };
-
-    const handleBeforeUnload = () => {
-      // Store the time when the tab is closed
-      localStorage.setItem('tabCloseTime', new Date().getTime());
-    };
-
-    const checkLogout = () => {
-      const lastActivityTime = localStorage.getItem('lastActivityTime');
-      const tabCloseTime = localStorage.getItem('tabCloseTime');
-      const currentTime = new Date().getTime();
-      const timeoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-      // Check if 30 minutes have passed since last activity or tab closure
-      if (lastActivityTime && (currentTime - lastActivityTime) >= timeoutDuration) {
-        handleLogout();
-      } else if (tabCloseTime && (currentTime - tabCloseTime) >= timeoutDuration) {
-        handleLogout();
-      }
-    };
-
-    // Attach event listeners
-    window.addEventListener('mousemove', resetInactivityTimer);
-    window.addEventListener('keypress', resetInactivityTimer);
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    // Start inactivity timer
-    resetInactivityTimer();
-
-    // Check for logout on page load
-    checkLogout();
-
-    return () => {
-      clearTimeout(inactivityTimer);
-      window.removeEventListener('mousemove', resetInactivityTimer);
-      window.removeEventListener('keypress', resetInactivityTimer);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [navigate]);
-
-    const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 

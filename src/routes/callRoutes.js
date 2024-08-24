@@ -1,8 +1,7 @@
-// routes/callRoutes.js
 const express = require('express');
 const router = express.Router();
 const callController = require('../controllers/callController');
-const {CallLog} = require('../models/userDetails');
+const { CallLog } = require('../models/userDetails');
 
 // Define routes
 
@@ -20,8 +19,9 @@ router.post('/start', async (req, res) => {
 // Submit form data and associate it with a call log
 router.post('/submit', async (req, res) => {
     try {
-        await callController.submitFormData(req.body.callLogId, req.body.formData);
-        res.status(200).json({ message: 'Form data submitted successfully' });
+        const { callLogId, formData } = req.body;
+        const updatedCallLog = await callController.submitFormData(callLogId, formData);
+        res.status(200).json({ message: 'Form data submitted successfully', data: updatedCallLog });
     } catch (error) {
         console.error('Error submitting form data:', error);
         res.status(500).json({ error: error.message });
@@ -36,11 +36,11 @@ router.get('/active/:agentId', async (req, res) => {
             uniqueId: agentId,
             status: 'active'
         });
-        
+
         if (!activeCallLog) {
             return res.status(404).json({ message: 'No active call log found for this agent' });
         }
-        
+
         res.status(200).json(activeCallLog);
     } catch (error) {
         console.error('Error fetching active call log:', error);
@@ -48,7 +48,4 @@ router.get('/active/:agentId', async (req, res) => {
     }
 });
 
-
-
 module.exports = router;
-

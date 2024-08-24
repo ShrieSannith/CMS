@@ -22,19 +22,13 @@ exports.submitFormData = async (callLogId, formData) => {
             throw new Error('Cannot submit form data for a completed call');
         }
 
-        // Merge form data into the CallLog document
-        const updatedCallLog = await CallLog.findByIdAndUpdate(
-            callLogId,
-            { 
-                formData: formData,
-                status: 'completed' 
-            },
-            { new: true } // Return the updated document
-        );
+        // Debug: Log incoming form data
+        console.log('FormData Received:', formData);
 
-        if (!updatedCallLog) {
-            throw new Error('Failed to update CallLog');
-        }
+        // Merge form data into the CallLog document
+        callLog.formData = formData;
+        callLog.status = 'completed';
+        const updatedCallLog = await callLog.save();
 
         return updatedCallLog;
     } catch (error) {

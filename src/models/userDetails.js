@@ -24,16 +24,17 @@ const callLogSchema = new mongoose.Schema({
     }, // Reference to the agent
     // formDataId: { type: mongoose.Schema.Types.ObjectId, ref: 'FormData' }, // Link to form data
     status: { type: String, enum: ["active", "completed"], default: "active" }, // Call status
-    formData: {
-        clientName: String,
-        urgency: String,
-        impact: String,
-        levelOfIssue: String,
-        issueDescription: String,
-        remarks: String,
-        sorted: Boolean,
-        priority: String,
-    }
+    // formData: {
+    //     clientName: String,
+    //     urgency: String,
+    //     impact: String,
+    //     levelOfIssue: String,
+    //     issueDescription: String,
+    //     remarks: String,
+    //     sorted: Boolean,
+    //     priority: String,
+    // },
+    formData: formDataSchema // Embed the form data schema
 });
 
 const userSchema = new mongoose.Schema({
