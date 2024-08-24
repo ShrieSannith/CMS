@@ -146,7 +146,7 @@ const IssueForm = () => {
       }
     };
   
-    // console.log("FormData to Submit:", formData);
+    console.log("FormData to Submit:", formData);
   
     try {
       const response = await axios.post('http://localhost:5000/api/calls/submit', formData, {
@@ -154,7 +154,7 @@ const IssueForm = () => {
           'Content-Type': 'application/json'
         }
       });
-      // console.log("Response from backend:", response.data);
+      console.log("Response from backend:", response.data);
   
       setSnackbar({
         open: true,
